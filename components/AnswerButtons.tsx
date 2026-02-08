@@ -23,7 +23,7 @@ export default function AnswerButtons({ options, onAnswer }: AnswerButtonsProps)
     };
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-2xl">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 w-full max-w-2xl">
             {options.map((option, index) => (
                 <button
                     key={index}

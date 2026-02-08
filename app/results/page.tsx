@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useRef } from 'react';
 import { saveGameScore, getUserIdFromLocalStorage } from '../../lib/supabase';
 import type { QuestionHistory, FailedQuestion } from '../../lib/types';
 
@@ -10,6 +10,7 @@ function ResultsContent() {
     const searchParams = useSearchParams();
     const [isSaving, setIsSaving] = useState(false);
     const [savedSuccessfully, setSavedSuccessfully] = useState(false);
+    const hasSaved = useRef(false); // Track if we've already saved
 
     const score = Number(searchParams.get('score') || '0');
     const level = Number(searchParams.get('level') || '1');
@@ -31,7 +32,11 @@ function ResultsContent() {
     // Save game score to Supabase
     useEffect(() => {
         const saveScore = async () => {
-            if (isSaving || savedSuccessfully) return;
+            // Check if already saved using ref
+            if (hasSaved.current || isSaving || savedSuccessfully) return;
+
+            // Mark as saved immediately to prevent race conditions
+            hasSaved.current = true;
 
             const userId = getUserIdFromLocalStorage();
             if (!userId) {
@@ -65,6 +70,7 @@ function ResultsContent() {
                 setSavedSuccessfully(true);
             } else {
                 console.error('Failed to save game score');
+                hasSaved.current = false; // Reset on error to allow retry
             }
 
             setIsSaving(false);

@@ -26,7 +26,6 @@ function GameContent() {
 
     useEffect(() => {
         if (isGameOver) {
-            // Small delay for the user to see the last answer result if we had an overlay
             const timeout = setTimeout(() => {
                 const query = new URLSearchParams({
                     score: score.toString(),

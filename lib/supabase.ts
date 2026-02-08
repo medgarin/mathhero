@@ -8,13 +8,13 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 /**
- * Create a new user with just their name
+ * Create a new user with their name and avatar
  */
-export async function createUser(name: string): Promise<User | null> {
+export async function createUser(name: string, avatar: string = 'astronaut'): Promise<User | null> {
     try {
         const { data, error } = await supabase
             .from('users')
-            .insert([{ name }])
+            .insert([{ name, avatar }])
             .select()
             .single();
 

@@ -38,7 +38,7 @@ export default function GameHeader({ lives, score, questionIndex, totalQuestions
 
                 <div className="flex items-center gap-4">
                     <div className="bg-primary/20 dark:bg-primary/10 px-5 py-2 rounded-full border border-primary/30">
-                        <span className="text-zinc-800 dark:text-primary font-bold text-sm tracking-wide uppercase">Score: <span className="text-lg">{score.toLocaleString()}</span></span>
+                        <span className="text-zinc-800 dark:text-primary font-bold text-xs tracking-wide uppercase">Score: <span className="text-sm">{score.toLocaleString()}</span></span>
                     </div>
                 </div>
             </div>

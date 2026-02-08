@@ -57,10 +57,10 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-6 bg-background-light dark:bg-background-dark">
       <header className="mb-12 text-center">
-        <div className="inline-block bg-green-200 rounded-custom-lg text-background-dark mb-4 shadow-xl shadow-primary/20">
-          <Image src="/logo.png" alt="Logo" width={200} height={200} />
-        </div>
         <h1 className="text-5xl font-black text-zinc-900 dark:text-white tracking-tighter mb-2">Math Hero</h1>
+
+        <Image src={`/avatars/${user?.avatar}.png`} alt="Logo" width={100} height={100} className='inline-block bg-green-200 rounded-custom-lg text-background-dark mb-4 shadow-xl shadow-primary/20' />
+
         {user && (
           <p className="text-primary font-black text-xl mb-2">¡Hola, {user.name}! 👋</p>
         )}

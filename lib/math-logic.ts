@@ -37,11 +37,11 @@ export const generateQuestion = (level: Level, failedQuestions: string[] = []): 
   }
 
   const correct = a * b;
-  
+
   // Create 3 options: 1 correct + 2 fakes
   const optionsSet = new Set<number>([correct]);
-  
-  while (optionsSet.size < 3) {
+
+  while (optionsSet.size < 4) {
     const offset = Math.floor(Math.random() * 5) + 1;
     const isPlus = Math.random() > 0.5;
     const fake = isPlus ? correct + offset : correct - offset;
@@ -57,7 +57,7 @@ export const generateQuestion = (level: Level, failedQuestions: string[] = []): 
 
 export const getTimeLimit = (level: Level, questionIndex: number): number => {
   if (level !== 4) return 10;
-  
+
   // Level 4 speed scaling
   if (questionIndex < 3) return 10;
   if (questionIndex < 6) return 7;
