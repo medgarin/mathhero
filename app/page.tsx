@@ -33,8 +33,14 @@ export default function Home() {
       if (userData) {
         setUser(userData);
       } else {
-        // User ID exists but user not found in DB, redirect to welcome
+        // User ID exists but user not found in DB
+        // Clear localStorage and redirect to welcome
+        console.warn('User not found in database, clearing localStorage');
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('easymaths_user_id');
+        }
         router.push('/welcome');
+        return;
       }
 
       setIsLoading(false);
