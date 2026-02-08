@@ -1,65 +1,109 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from "next/link";
 import Image from "next/image";
+import { getUserIdFromLocalStorage, getUser } from '../lib/supabase';
+import type { User } from '../lib/types';
 
 export default function Home() {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  const levels = [
+    { id: 1, title: "Nivel 1", range: "Tablas 1 - 5", icon: "school", color: "bg-blue-500" },
+    { id: 2, title: "Nivel 2", range: "Tablas 6 - 9", icon: "star", color: "bg-purple-500" },
+    { id: 3, title: "Nivel 3", range: "Mezclado", icon: "psychology", color: "bg-orange-500" },
+    { id: 4, title: "Nivel 4", range: "Contrarreloj", icon: "timer", color: "bg-red-500" },
+  ];
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const userId = getUserIdFromLocalStorage();
+
+      if (!userId) {
+        router.push('/welcome');
+        return;
+      }
+
+      // Fetch user data from Supabase
+      const userData = await getUser(userId);
+      if (userData) {
+        setUser(userData);
+      } else {
+        // User ID exists but user not found in DB, redirect to welcome
+        router.push('/welcome');
+      }
+
+      setIsLoading(false);
+    };
+
+    checkUser();
+  }, [router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background-light dark:bg-background-dark">
+        <div className="text-center">
+          <span className="material-symbols-outlined text-6xl text-primary animate-spin">refresh</span>
+          <p className="mt-4 text-zinc-500 dark:text-zinc-400 font-bold">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex min-h-screen flex-col items-center justify-center p-6 bg-background-light dark:bg-background-dark">
+      <header className="mb-12 text-center">
+        <div className="inline-block bg-green-200 rounded-custom-lg text-background-dark mb-4 shadow-xl shadow-primary/20">
+          <Image src="/logo.png" alt="Logo" width={200} height={200} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <h1 className="text-5xl font-black text-zinc-900 dark:text-white tracking-tighter mb-2">Math Hero</h1>
+        {user && (
+          <p className="text-primary font-black text-xl mb-2">¡Hola, {user.name}! 👋</p>
+        )}
+        <p className="text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-[0.2em] text-sm">Escoge tu desafío</p>
+      </header>
+
+      <main className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl">
+        {levels.map((level) => (
+          <Link
+            key={level.id}
+            href={`/game?level=${level.id}`}
+            className="group relative bg-white dark:bg-zinc-900 border-b-8 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 active:border-b-2 active:translate-y-1 p-8 rounded-custom-lg transition-all"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <div className="flex items-center gap-6">
+              <div className={`${level.color} p-4 rounded-custom text-white`}>
+                <span className="material-symbols-outlined text-4xl">{level.icon}</span>
+              </div>
+              <div className="text-left">
+                <h2 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">{level.title}</h2>
+                <p className="text-zinc-500 dark:text-zinc-400 font-bold uppercase text-xs tracking-widest">{level.range}</p>
+              </div>
+            </div>
+            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="material-symbols-outlined text-zinc-300">arrow_forward</span>
+            </div>
+          </Link>
+        ))}
       </main>
+
+      {/* Scoreboard Link */}
+      <div className="mt-8">
+        <Link
+          href="/scoreboard"
+          className="flex items-center gap-2 px-6 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black rounded-custom-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all"
+        >
+          <span className="material-symbols-outlined">leaderboard</span>
+          Ver mi marcador
+        </Link>
+      </div>
+
+      <footer className="mt-16 text-zinc-400 dark:text-zinc-600 font-bold text-sm uppercase tracking-widest">
+        Hecho con ❤️ para aprender jugando
+      </footer>
     </div>
   );
 }

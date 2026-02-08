@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Math Hero - EasyMaths
 
-## Getting Started
+Una aplicación educativa interactiva para que los niños practiquen las tablas de multiplicar de manera divertida y efectiva.
 
-First, run the development server:
+## 🎮 Características
 
+- **4 Niveles de Dificultad**: Desde tablas básicas hasta modo contrarreloj
+- **Sistema de Vidas**: 3 vidas por juego para mantener el desafío
+- **Puntuación y Estadísticas**: Seguimiento detallado del progreso
+- **Marcador Personal**: Historial completo de juegos con análisis de errores
+- **Repetición Inteligente**: El sistema repite preguntas falladas para reforzar el aprendizaje
+- **Diseño Atractivo**: Interfaz moderna y colorida diseñada para niños
+
+## 🚀 Inicio Rápido
+
+### Prerrequisitos
+
+- Node.js 18+ instalado
+- pnpm (recomendado) o npm
+- Cuenta gratuita en [Supabase](https://supabase.com)
+
+### Instalación
+
+1. Clona el repositorio:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <tu-repositorio>
+cd easymaths
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instala las dependencias:
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Configura Supabase:
+   - Sigue las instrucciones en [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
+   - Crea tu archivo `.env.local` con las credenciales
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Inicia el servidor de desarrollo:
+```bash
+pnpm dev
+```
 
-## Learn More
+5. Abre [http://localhost:3000](http://localhost:3000) en tu navegador
 
-To learn more about Next.js, take a look at the following resources:
+## 📊 Estructura del Proyecto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+easymaths/
+├── app/                    # Páginas de Next.js
+│   ├── page.tsx           # Página principal (selección de nivel)
+│   ├── welcome/           # Página de bienvenida (ingreso de nombre)
+│   ├── game/              # Página del juego
+│   ├── results/           # Página de resultados
+│   └── scoreboard/        # Marcador y estadísticas
+├── components/            # Componentes reutilizables
+├── lib/                   # Lógica de negocio y utilidades
+│   ├── supabase.ts       # Cliente y funciones de Supabase
+│   ├── types.ts          # Definiciones de TypeScript
+│   ├── math-logic.ts     # Generación de preguntas
+│   └── hooks/            # React hooks personalizados
+├── supabase/             # Esquema de base de datos
+└── public/               # Recursos estáticos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
 
-## Deploy on Vercel
+## 🎯 Niveles de Juego
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Nivel 1**: Tablas del 1 al 5 (10 segundos por pregunta)
+2. **Nivel 2**: Tablas del 6 al 9 (10 segundos por pregunta)
+3. **Nivel 3**: Mezclado - Todas las tablas (10 segundos por pregunta)
+4. **Nivel 4**: Contrarreloj - Tiempo reducido progresivamente (10s → 7s → 5s)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💾 Base de Datos
+
+La aplicación utiliza Supabase (PostgreSQL) con dos tablas principales:
+
+- **users**: Almacena solo el nombre del usuario (privacidad primero)
+- **game_scores**: Registra cada partida con detalles completos incluyendo preguntas falladas
+
+Ver [supabase/schema.sql](./supabase/schema.sql) para el esquema completo.
+
+## 🛠️ Tecnologías
+
+- **Framework**: Next.js 16 (App Router)
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS 4
+- **Base de Datos**: Supabase (PostgreSQL)
+- **Gestión de Estado**: React Hooks
+- **Iconos**: Material Symbols
+
+## 📝 Scripts Disponibles
+
+```bash
+pnpm dev      # Inicia el servidor de desarrollo
+pnpm build    # Construye la aplicación para producción
+pnpm start    # Inicia el servidor de producción
+pnpm lint     # Ejecuta el linter
+```
+
+## 🔮 Próximas Características
+
+- [ ] Leaderboard global entre usuarios
+- [ ] Sistema de logros e insignias
+- [ ] Modo multijugador en tiempo real
+- [ ] Desafíos diarios
+- [ ] Temas personalizables
+- [ ] Soporte para división y suma/resta
+
+## 📄 Licencia
+
+Este proyecto es de código abierto y está disponible bajo la licencia MIT.
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios que te gustaría hacer.
