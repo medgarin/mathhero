@@ -223,3 +223,142 @@ export function clearUserIdFromLocalStorage(): void {
         localStorage.removeItem(USER_ID_KEY);
     }
 }
+
+/**
+ * Achievement System Functions
+ */
+
+/**
+ * Save unlocked achievements to the database
+ */
+export async function saveAchievements(
+    userId: string,
+    achievementIds: string[]
+): Promise<boolean> {
+    try {
+        const achievements = achievementIds.map(id => ({
+            user_id: userId,
+            achievement_id: id,
+        }));
+
+        const { error } = await supabase
+            .from('user_achievements')
+            .insert(achievements);
+
+        if (error) {
+            console.error('Error saving achievements:', error);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Exception saving achievements:', error);
+        return false;
+    }
+}
+
+/**
+ * Get all unlocked achievements for a user
+ */
+export async function getUserAchievements(userId: string): Promise<string[]> {
+    try {
+        const { data, error } = await supabase
+            .from('user_achievements')
+            .select('achievement_id')
+            .eq('user_id', userId);
+
+        if (error) {
+            console.error('Error fetching achievements:', error);
+            return [];
+        }
+
+        return data.map(a => a.achievement_id);
+    } catch (error) {
+        console.error('Exception fetching achievements:', error);
+        return [];
+    }
+}
+
+/**
+ * Update user's days played
+ */
+export async function updateUserDaysPlayed(
+    userId: string,
+    daysPlayed: string[]
+): Promise<boolean> {
+    try {
+        const { error } = await supabase
+            .from('users')
+            .update({ days_played: daysPlayed })
+            .eq('id', userId);
+
+        if (error) {
+            console.error('Error updating days played:', error);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Exception updating days played:', error);
+        return false;
+    }
+}
+
+/**
+ * Update user's best streak
+ */
+export async function updateUserBestStreak(
+    userId: string,
+    streak: number
+): Promise<boolean> {
+    try {
+        // Only update if new streak is better
+        const { data: user } = await supabase
+            .from('users')
+            .select('best_streak')
+            .eq('id', userId)
+            .single();
+
+        if (!user || streak <= (user.best_streak || 0)) {
+            return true; // No update needed
+        }
+
+        const { error } = await supabase
+            .from('users')
+            .update({ best_streak: streak })
+            .eq('id', userId);
+
+        if (error) {
+            console.error('Error updating best streak:', error);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Exception updating best streak:', error);
+        return false;
+    }
+}
+
+/**
+ * Get user with achievement stats
+ */
+export async function getUserWithStats(userId: string) {
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+        if (error) {
+            console.error('Error fetching user with stats:', error);
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Exception fetching user with stats:', error);
+        return null;
+    }
+}

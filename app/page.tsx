@@ -96,8 +96,8 @@ export default function Home() {
         ))}
       </main>
 
-      {/* Scoreboard Link */}
-      <div className="mt-8">
+      {/* Links */}
+      <div className="mt-8 flex gap-4">
         <Link
           href="/scoreboard"
           className="flex items-center gap-2 px-6 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black rounded-custom-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all"
@@ -105,7 +105,16 @@ export default function Home() {
           <span className="material-symbols-outlined">leaderboard</span>
           Ver mi marcador
         </Link>
+
+        <Link
+          href="/achievements"
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-yellow-400 text-background-dark font-black rounded-custom-lg hover:scale-105 transition-all shadow-lg shadow-primary/20"
+        >
+          <span className="material-symbols-outlined">emoji_events</span>
+          Mis Logros
+        </Link>
       </div>
+
 
       <footer className="mt-16 text-zinc-400 dark:text-zinc-600 font-bold text-sm uppercase tracking-widest">
         Hecho con ❤️ para aprender jugando
