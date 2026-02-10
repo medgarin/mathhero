@@ -46,3 +46,30 @@ CREATE POLICY "Allow all operations on game_scores" ON game_scores
 COMMENT ON TABLE users IS 'Stores user information - only name is collected for privacy';
 COMMENT ON TABLE game_scores IS 'Stores detailed game session data including failed questions for learning insights';
 COMMENT ON COLUMN game_scores.failed_questions IS 'JSONB array of failed questions with format: [{question: "2x3", userAnswer: 5, correctAnswer: 6}]';
+
+-- Leaderboard Function
+CREATE OR REPLACE FUNCTION get_leaderboard(p_level INTEGER DEFAULT NULL)
+RETURNS TABLE (
+    user_id UUID,
+    name TEXT,
+    avatar TEXT,
+    total_games BIGINT,
+    total_score BIGINT,
+    best_score INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        u.id,
+        u.name,
+        u.avatar,
+        COUNT(gs.id) as total_games,
+        SUM(gs.score)::BIGINT as total_score,
+        MAX(gs.score) as best_score
+    FROM users u
+    JOIN game_scores gs ON u.id = gs.user_id
+    WHERE (p_level IS NULL OR gs.level = p_level)
+    GROUP BY u.id, u.name, u.avatar
+    ORDER BY total_score DESC;
+END;
+$$ LANGUAGE plpgsql;

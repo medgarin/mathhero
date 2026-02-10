@@ -14,6 +14,7 @@ export default function ScoreboardPage() {
         averageScore: 0,
         averageAccuracy: 0,
         bestScore: 0,
+        totalScore: 0,
         totalCorrectAnswers: 0,
     });
     const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
@@ -117,6 +118,14 @@ export default function ScoreboardPage() {
                         </span>
                         <span className="text-3xl font-black text-primary">
                             {stats.bestScore}
+                        </span>
+                    </div>
+                    <div className="bg-white dark:bg-zinc-900 p-6 rounded-custom-lg border border-zinc-100 dark:border-zinc-800">
+                        <span className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
+                            Total Puntos
+                        </span>
+                        <span className="text-3xl font-black text-yellow-500">
+                            {stats.totalScore}
                         </span>
                     </div>
                     <div className="bg-white dark:bg-zinc-900 p-6 rounded-custom-lg border border-zinc-100 dark:border-zinc-800">

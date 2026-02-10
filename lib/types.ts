@@ -79,3 +79,13 @@ export interface UnlockedAchievement {
     unlocked_at: string;
     progress: number;
 }
+
+export interface LeaderboardEntry {
+    user_id: string;
+    name: string;
+    avatar: string;
+    total_games: number;
+    total_score: number;
+    best_score: number;
+    rank?: number;
+}

@@ -99,21 +99,29 @@ export default function Home() {
       </main>
 
       {/* Links */}
-      <div className="mt-8 flex gap-4">
+      <div className="mt-8 flex flex-wrap justify-center gap-4">
         <Link
           href="/scoreboard"
-          className="flex items-center gap-2 px-6 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black rounded-custom-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all"
+          className="flex items-center gap-2 px-6 py-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black rounded-custom-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all"
         >
-          <span className="material-symbols-outlined">leaderboard</span>
-          Ver mi marcador
+          <span className="material-symbols-outlined">analytics</span>
+          Mi Marcador
         </Link>
 
         <Link
           href="/achievements"
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-yellow-400 text-background-dark font-black rounded-custom-lg hover:scale-105 transition-all shadow-lg shadow-primary/20"
+          className="flex items-center gap-2 px-8 py-4 bg-primary text-background-dark font-black rounded-custom-lg hover:scale-105 transition-all shadow-xl shadow-primary/20"
         >
           <span className="material-symbols-outlined">emoji_events</span>
           Mis Logros
+        </Link>
+
+        <Link
+          href="/leaderboard"
+          className="flex items-center gap-2 px-6 py-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black rounded-custom-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all"
+        >
+          <span className="material-symbols-outlined">leaderboard</span>
+          Clasificación
         </Link>
       </div>
 

@@ -168,6 +168,7 @@ export async function getUserStats(userId: string) {
                 averageScore: 0,
                 averageAccuracy: 0,
                 bestScore: 0,
+                totalScore: 0,
                 totalCorrectAnswers: 0,
             };
         }
@@ -183,6 +184,7 @@ export async function getUserStats(userId: string) {
 
         return {
             totalGames,
+            totalScore,
             averageScore: Math.round(totalScore / totalGames),
             averageAccuracy: Math.round(totalAccuracy / totalGames),
             bestScore,
@@ -192,6 +194,7 @@ export async function getUserStats(userId: string) {
         console.error('Exception calculating user stats:', error);
         return {
             totalGames: 0,
+            totalScore: 0,
             averageScore: 0,
             averageAccuracy: 0,
             bestScore: 0,
@@ -360,5 +363,29 @@ export async function getUserWithStats(userId: string) {
     } catch (error) {
         console.error('Exception fetching user with stats:', error);
         return null;
+    }
+}
+
+/**
+ * Get leaderboard data
+ */
+export async function getLeaderboard(level?: number): Promise<import('./types').LeaderboardEntry[]> {
+    try {
+        const { data, error } = await supabase.rpc('get_leaderboard', {
+            p_level: level || null
+        });
+
+        if (error) {
+            console.error('Error fetching leaderboard:', error);
+            return [];
+        }
+
+        return (data || []).map((entry: any, index: number) => ({
+            ...entry,
+            rank: index + 1
+        }));
+    } catch (error) {
+        console.error('Exception fetching leaderboard:', error);
+        return [];
     }
 }
