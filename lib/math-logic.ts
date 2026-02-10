@@ -5,7 +5,7 @@ export type Question = {
   options: number[];
 };
 
-export type Level = 1 | 2 | 3 | 4;
+export type Level = 1 | 2 | 3 | 4 | 5 | 6;
 
 export const generateQuestion = (level: Level, failedQuestions: string[] = []): Question => {
   let a: number, b: number;
@@ -18,18 +18,29 @@ export const generateQuestion = (level: Level, failedQuestions: string[] = []): 
     b = parts[1];
   } else {
     switch (level) {
-      case 1: // 1 to 5
-        a = Math.floor(Math.random() * 5) + 1;
-        b = Math.floor(Math.random() * 10) + 1;
+      case 1: // Tablas 1-3
+        a = Math.floor(Math.random() * 3) + 1; // 1, 2, 3
+        b = Math.floor(Math.random() * 10) + 1; // 1-10
         break;
-      case 2: // 6 to 9
-        a = Math.floor(Math.random() * 4) + 6;
-        b = Math.floor(Math.random() * 10) + 1;
+      case 2: // Tablas 4-6
+        a = Math.floor(Math.random() * 3) + 4; // 4, 5, 6
+        b = Math.floor(Math.random() * 10) + 1; // 1-10
         break;
-      case 3: // Mixed
-      case 4: // Contrareloj (Mixed)
-        a = Math.floor(Math.random() * 9) + 1;
-        b = Math.floor(Math.random() * 10) + 1;
+      case 3: // Tablas 7-10
+        a = Math.floor(Math.random() * 4) + 7; // 7, 8, 9, 10
+        b = Math.floor(Math.random() * 10) + 1; // 1-10
+        break;
+      case 4: // Combinación nivel 1 y 2 (tablas 1-6)
+        a = Math.floor(Math.random() * 6) + 1; // 1-6
+        b = Math.floor(Math.random() * 10) + 1; // 1-10
+        break;
+      case 5: // Todas las tablas (1-10)
+        a = Math.floor(Math.random() * 10) + 1; // 1-10
+        b = Math.floor(Math.random() * 10) + 1; // 1-10
+        break;
+      case 6: // Todas las tablas contrarreloj (1-10)
+        a = Math.floor(Math.random() * 10) + 1; // 1-10
+        b = Math.floor(Math.random() * 10) + 1; // 1-10
         break;
       default:
         a = 2; b = 2;
@@ -38,7 +49,7 @@ export const generateQuestion = (level: Level, failedQuestions: string[] = []): 
 
   const correct = a * b;
 
-  // Create 3 options: 1 correct + 2 fakes
+  // Create 4 options: 1 correct + 3 fakes
   const optionsSet = new Set<number>([correct]);
 
   while (optionsSet.size < 4) {
@@ -56,12 +67,16 @@ export const generateQuestion = (level: Level, failedQuestions: string[] = []): 
 };
 
 export const getTimeLimit = (level: Level, questionIndex: number): number => {
-  if (level !== 4) return 10;
+  // Level 6 is time-based challenge
+  if (level === 6) {
+    // Progressive difficulty
+    if (questionIndex < 3) return 8;
+    if (questionIndex < 6) return 6;
+    return 4;
+  }
 
-  // Level 4 speed scaling
-  if (questionIndex < 3) return 10;
-  if (questionIndex < 6) return 7;
-  return 5;
+  // All other levels have standard time
+  return 10;
 };
 
 export const calculatePoints = (isCorrect: boolean, timeLeft: number): number => {

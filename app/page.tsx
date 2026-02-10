@@ -13,10 +13,12 @@ export default function Home() {
   const router = useRouter();
 
   const levels = [
-    { id: 1, title: "Nivel 1", range: "Tablas 1 - 5", icon: "school", color: "bg-blue-500" },
-    { id: 2, title: "Nivel 2", range: "Tablas 6 - 9", icon: "star", color: "bg-purple-500" },
-    { id: 3, title: "Nivel 3", range: "Mezclado", icon: "psychology", color: "bg-orange-500" },
-    { id: 4, title: "Nivel 4", range: "Contrarreloj", icon: "timer", color: "bg-red-500" },
+    { id: 1, title: "Nivel 1", range: "Tablas 1 - 3", icon: "looks_one", color: "bg-blue-400" },
+    { id: 2, title: "Nivel 2", range: "Tablas 4 - 6", icon: "looks_two", color: "bg-blue-500" },
+    { id: 3, title: "Nivel 3", range: "Tablas 7 - 10", icon: "looks_3", color: "bg-blue-600" },
+    { id: 4, title: "Nivel 4", range: "Tablas 1 - 6", icon: "star_half", color: "bg-purple-500" },
+    { id: 5, title: "Nivel 5", range: "Todas las Tablas", icon: "star", color: "bg-orange-500" },
+    { id: 6, title: "Nivel 6", range: "Contrarreloj", icon: "timer", color: "bg-red-500" },
   ];
 
   useEffect(() => {

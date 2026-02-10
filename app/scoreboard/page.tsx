@@ -20,8 +20,8 @@ export default function ScoreboardPage() {
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
-    const levelNames = ['Nivel 1', 'Nivel 2', 'Nivel 3', 'Nivel 4'];
-    const levelColors = ['bg-blue-500', 'bg-purple-500', 'bg-orange-500', 'bg-red-500'];
+    const levelNames = ['Nivel 1', 'Nivel 2', 'Nivel 3', 'Nivel 4', 'Nivel 5', 'Nivel 6'];
+    const levelColors = ['bg-blue-400', 'bg-blue-500', 'bg-blue-600', 'bg-purple-500', 'bg-orange-500', 'bg-red-500'];
 
     useEffect(() => {
         const loadData = async () => {
@@ -156,7 +156,7 @@ export default function ScoreboardPage() {
                     >
                         Todos los niveles
                     </button>
-                    {[1, 2, 3, 4].map((level) => (
+                    {[1, 2, 3, 4, 5, 6].map((level) => (
                         <button
                             key={level}
                             onClick={() => setSelectedLevel(level)}
@@ -208,7 +208,11 @@ export default function ScoreboardPage() {
                                         <div className="flex items-start gap-4 flex-1">
                                             <div className={`${levelColors[score.level - 1]} p-3 rounded-custom text-white`}>
                                                 <span className="material-symbols-outlined text-2xl">
-                                                    {score.level === 1 ? 'school' : score.level === 2 ? 'star' : score.level === 3 ? 'psychology' : 'timer'}
+                                                    {score.level === 1 ? 'looks_one' :
+                                                        score.level === 2 ? 'looks_two' :
+                                                            score.level === 3 ? 'looks_3' :
+                                                                score.level === 4 ? 'star_half' :
+                                                                    score.level === 5 ? 'star' : 'timer'}
                                                 </span>
                                             </div>
                                             <div className="flex-1">

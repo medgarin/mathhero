@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS game_scores (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  level INTEGER NOT NULL CHECK (level >= 1 AND level <= 4),
+  level INTEGER NOT NULL CHECK (level >= 1 AND level <= 6),
   score INTEGER NOT NULL DEFAULT 0,
   accuracy INTEGER NOT NULL CHECK (accuracy >= 0 AND accuracy <= 100),
   lives_remaining INTEGER NOT NULL DEFAULT 0,

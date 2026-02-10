@@ -263,6 +263,22 @@ export const achievements: Achievement[] = [
         },
     },
     {
+        id: 'level_5_perfect',
+        title: 'Genio de las Tablas',
+        description: 'Completa el Nivel 5 sin fallos',
+        icon: 'psychology_alt',
+        category: 'mastery',
+        condition: (game) => game.level === 5 && game.accuracy === 100 && game.total >= 10,
+    },
+    {
+        id: 'level_6_master',
+        title: 'Velocidad Absoluta',
+        description: 'Domina el Nivel 6 con 90% de aciertos',
+        icon: 'timer_3',
+        category: 'mastery',
+        condition: (game) => game.level === 6 && game.accuracy >= 90 && game.total >= 10,
+    },
+    {
         id: 'all_levels',
         title: 'Explorador',
         description: 'Completa todos los niveles',
@@ -270,7 +286,7 @@ export const achievements: Achievement[] = [
         category: 'mastery',
         condition: (_, user) => {
             const levels = new Set(user.gamesHistory.map(g => g.level));
-            return levels.size >= 4;
+            return levels.size >= 6;
         },
     },
 ];
