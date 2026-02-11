@@ -178,17 +178,17 @@ function ResultsContent() {
                     </header>
 
                     <div className="grid grid-cols-3 gap-4 mb-12">
-                        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-6 rounded-custom-lg">
-                            <span className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Puntaje</span>
-                            <span className="text-3xl font-black text-zinc-900 dark:text-white">{score}</span>
+                        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-2 md:p-6 rounded-custom-lg">
+                            <span className="block text-[8px] md:text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Puntaje</span>
+                            <span className="text-lg md:text-3xl font-black text-zinc-900 dark:text-white">{score}</span>
                         </div>
-                        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-6 rounded-custom-lg">
-                            <span className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Precisión</span>
-                            <span className="text-3xl font-black text-zinc-900 dark:text-white">{accuracy}%</span>
+                        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-2 md:p-6 rounded-custom-lg">
+                            <span className="block text-[8px] md:text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Precisión</span>
+                            <span className="text-lg md:text-3xl font-black text-zinc-900 dark:text-white">{accuracy}%</span>
                         </div>
-                        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-6 rounded-custom-lg">
-                            <span className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Vidas</span>
-                            <span className="text-3xl font-black text-red-500 flex items-center justify-center gap-1">
+                        <div className="bg-zinc-50 dark:bg-zinc-800/50 p-2 md:p-6 rounded-custom-lg">
+                            <span className="block text-[8px] md:text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Vidas</span>
+                            <span className="text-lg md:text-3xl font-black text-red-500 flex items-center justify-center gap-1">
                                 {lives} <span className="material-symbols-outlined text-sm">favorite</span>
                             </span>
                         </div>

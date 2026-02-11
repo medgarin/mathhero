@@ -56,7 +56,7 @@ export default function LeaderboardPage() {
                         </h1>
                     </div>
                     <p className="text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-[0.2em] text-sm ml-1">
-                        Mira quiénes son los mejores héroes matemáticos
+                        Mira cómo van tus amigos
                     </p>
                 </header>
 
@@ -89,7 +89,7 @@ export default function LeaderboardPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-custom-xl border border-zinc-100 dark:border-zinc-800 shadow-xl overflow-hidden">
                     <div className="grid grid-cols-12 gap-4 p-6 bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-100 dark:border-zinc-800 font-black text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
                         <div className="col-span-1 text-center">Rango</div>
-                        <div className="col-span-5 sm:col-span-6">Jugador</div>
+                        <div className="col-span-6 sm:col-span-5">Jugador</div>
                         <div className="col-span-2 text-center hidden sm:block">Partidas</div>
                         <div className="col-span-2 text-center">Mejor</div>
                         <div className="col-span-2 text-end pr-2">Total</div>
@@ -122,7 +122,7 @@ export default function LeaderboardPage() {
                                             <span className="font-black text-zinc-400">#{index + 1}</span>
                                         )}
                                     </div>
-                                    <div className="col-span-5 sm:col-span-6 flex items-center gap-4">
+                                    <div className="col-span-6 sm:col-span-5 flex items-center gap-4">
                                         <div className="relative">
                                             <div className={`w-12 h-12 rounded-custom overflow-hidden border-2 ${index < 3 ? 'border-primary' : 'border-zinc-200 dark:border-zinc-700'}`}>
                                                 <Image
@@ -140,7 +140,7 @@ export default function LeaderboardPage() {
                                             )}
                                         </div>
                                         <div>
-                                            <h3 className="font-black text-zinc-900 dark:text-white truncate max-w-[120px] sm:max-w-none">
+                                            <h3 className="font-black text-zinc-900 dark:text-white truncate max-w-[100px] sm:max-w-none">
                                                 {entry.name}
                                             </h3>
                                             <span className="sm:hidden text-[10px] font-bold text-zinc-400 uppercase">
