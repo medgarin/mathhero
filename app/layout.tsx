@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Math Hero",
+  title: "Play Math Hero | Juega y practica matemáticas",
   description: "Math Hero es un juego de matemáticas que te ayuda a mejorar tus habilidades matemáticas.",
 };
 
