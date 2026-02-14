@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getUserIdFromLocalStorage, getUser, getUserGameScores, getUserStats } from '../../lib/supabase';
+import { getUserId, getUser, getUserGameScores, getUserStats } from '../../lib/supabase';
 import type { User, GameScore } from '../../lib/types';
 
 export default function ScoreboardPage() {
@@ -26,7 +26,7 @@ export default function ScoreboardPage() {
 
     useEffect(() => {
         const loadData = async () => {
-            const userId = getUserIdFromLocalStorage();
+            const userId = await getUserId();
 
             if (!userId) {
                 router.push('/welcome');

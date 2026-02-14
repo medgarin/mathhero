@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Suspense, useEffect, useState, useRef } from 'react';
 import {
     saveGameScore,
-    getUserIdFromLocalStorage,
+    getUserId,
     getUserGameScores,
     getUserAchievements,
     getUserWithStats,
@@ -51,7 +51,7 @@ function ResultsContent() {
             // Mark as saved immediately to prevent race conditions
             hasSaved.current = true;
 
-            const userId = getUserIdFromLocalStorage();
+            const userId = await getUserId();
             if (!userId) {
                 console.error('No user ID found');
                 return;

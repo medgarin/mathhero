@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { User, GameScore, FailedQuestion } from './types';
+import { USER_ID_COOKIE, getCookieClient, setCookieClient, deleteCookieClient } from './cookies';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -204,28 +205,48 @@ export async function getUserStats(userId: string) {
 }
 
 /**
- * Local storage helpers for user session
+ * Cookie helpers for user session
  */
-export const USER_ID_KEY = 'easymaths_user_id';
+export const USER_ID_KEY = USER_ID_COOKIE;
 
-export function saveUserIdToLocalStorage(userId: string): void {
-    if (typeof window !== 'undefined') {
-        localStorage.setItem(USER_ID_KEY, userId);
-    }
+export function saveUserIdToCookies(userId: string): void {
+    setCookieClient(USER_ID_KEY, userId);
 }
 
-export function getUserIdFromLocalStorage(): string | null {
-    if (typeof window !== 'undefined') {
-        return localStorage.getItem(USER_ID_KEY);
+export function getUserIdFromCookies(): string | null {
+    return getCookieClient(USER_ID_KEY) || null;
+}
+
+/**
+ * Async helper to get user ID, handles httpOnly cookies by calling the session API
+ */
+export async function getUserId(): Promise<string | null> {
+    // Try client-side first (works for non-httpOnly)
+    const clientSideId = getUserIdFromCookies();
+    if (clientSideId) return clientSideId;
+
+    // Try API if client-side check fails (needed for httpOnly)
+    try {
+        const response = await fetch('/api/auth/session');
+        if (response.ok) {
+            const data = await response.json();
+            return data.userId;
+        }
+    } catch (e) {
+        console.error('Error fetching user ID from session API:', e);
     }
     return null;
 }
 
-export function clearUserIdFromLocalStorage(): void {
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem(USER_ID_KEY);
-    }
+
+export function clearUserIdFromCookies(): void {
+    deleteCookieClient(USER_ID_KEY);
 }
+
+// Keep old names for compatibility during migration if necessary, but marked as deprecated/redirected
+export const saveUserIdToLocalStorage = saveUserIdToCookies;
+export const getUserIdFromLocalStorage = getUserIdFromCookies;
+export const clearUserIdFromLocalStorage = clearUserIdFromCookies;
 
 /**
  * Achievement System Functions

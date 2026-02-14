@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import Image from "next/image";
-import { getUserIdFromLocalStorage, getUser } from '../lib/supabase';
+import { getUserId, getUser } from '../lib/supabase';
 import type { User } from '../lib/types';
 
 export default function Home() {
@@ -23,7 +23,7 @@ export default function Home() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const userId = getUserIdFromLocalStorage();
+      const userId = await getUserId();
 
       if (!userId) {
         router.push('/welcome');
@@ -36,11 +36,9 @@ export default function Home() {
         setUser(userData);
       } else {
         // User ID exists but user not found in DB
-        // Clear localStorage and redirect to welcome
-        console.warn('User not found in database, clearing localStorage');
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('easymaths_user_id');
-        }
+        // Clear session and redirect to welcome
+        console.warn('User not found in database, clearing session');
+        await fetch('/api/auth/session', { method: 'DELETE' });
         router.push('/welcome');
         return;
       }

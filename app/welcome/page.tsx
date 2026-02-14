@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { createUser, saveUserIdToLocalStorage, getUserIdFromLocalStorage } from '../../lib/supabase';
+import { createUser, saveUserIdToCookies, getUserId } from '../../lib/supabase';
 import AvatarSelector from '../../components/AvatarSelector';
 
 export default function WelcomePage() {
@@ -15,10 +15,13 @@ export default function WelcomePage() {
 
     useEffect(() => {
         // If user already exists, redirect to home
-        const existingUserId = getUserIdFromLocalStorage();
-        if (existingUserId) {
-            router.push('/');
-        }
+        const checkExisting = async () => {
+            const existingUserId = await getUserId();
+            if (existingUserId) {
+                router.push('/');
+            }
+        };
+        checkExisting();
     }, [router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -41,8 +44,18 @@ export default function WelcomePage() {
             const user = await createUser(name.trim(), selectedAvatar);
 
             if (user) {
-                saveUserIdToLocalStorage(user.id);
-                router.push('/');
+                // Set the secure httpOnly cookie via API
+                const sessionRes = await fetch('/api/auth/session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: user.id }),
+                });
+
+                if (sessionRes.ok) {
+                    router.push('/');
+                } else {
+                    setError('Hubo un error al iniciar tu sesión. Por favor intenta de nuevo.');
+                }
             } else {
                 setError('Hubo un error al crear tu perfil. Por favor intenta de nuevo.');
             }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getUserIdFromLocalStorage, getUserAchievements, getUserGameScores, getUserWithStats } from '../../lib/supabase';
+import { getUserId, getUserAchievements, getUserGameScores, getUserWithStats } from '../../lib/supabase';
 import { achievements } from '../../lib/achievements/definitions';
 import { createUserStats } from '../../lib/achievements/engine';
 import type { AchievementCategory } from '../../lib/types';
@@ -25,7 +25,7 @@ export default function AchievementsPage() {
 
     useEffect(() => {
         const loadAchievements = async () => {
-            const userId = getUserIdFromLocalStorage();
+            const userId = await getUserId();
             if (!userId) {
                 router.push('/welcome');
                 return;
@@ -104,8 +104,8 @@ export default function AchievementsPage() {
                     <button
                         onClick={() => setSelectedCategory('all')}
                         className={`px-4 py-2 rounded-custom-lg font-bold transition-all ${selectedCategory === 'all'
-                                ? 'bg-primary text-background-dark'
-                                : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                            ? 'bg-primary text-background-dark'
+                            : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
                             }`}
                     >
                         Todos
@@ -115,8 +115,8 @@ export default function AchievementsPage() {
                             key={key}
                             onClick={() => setSelectedCategory(key as AchievementCategory)}
                             className={`px-4 py-2 rounded-custom-lg font-bold transition-all flex items-center gap-2 ${selectedCategory === key
-                                    ? `${info.color} text-white`
-                                    : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                                ? `${info.color} text-white`
+                                : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
                                 }`}
                         >
                             <span className="material-symbols-outlined text-lg">{info.icon}</span>
@@ -135,14 +135,14 @@ export default function AchievementsPage() {
                             <div
                                 key={achievement.id}
                                 className={`bg-white dark:bg-zinc-900 rounded-custom-lg border-2 p-6 transition-all ${isUnlocked
-                                        ? 'border-primary shadow-lg shadow-primary/20 hover:scale-105'
-                                        : 'border-zinc-200 dark:border-zinc-800 opacity-60'
+                                    ? 'border-primary shadow-lg shadow-primary/20 hover:scale-105'
+                                    : 'border-zinc-200 dark:border-zinc-800 opacity-60'
                                     }`}
                             >
                                 {/* Icon */}
                                 <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isUnlocked
-                                        ? `${categoryData.color} shadow-lg`
-                                        : 'bg-zinc-100 dark:bg-zinc-800'
+                                    ? `${categoryData.color} shadow-lg`
+                                    : 'bg-zinc-100 dark:bg-zinc-800'
                                     }`}>
                                     <span className={`material-symbols-outlined text-3xl ${isUnlocked ? 'text-white' : 'text-zinc-400'
                                         }`}>
@@ -152,22 +152,22 @@ export default function AchievementsPage() {
 
                                 {/* Content */}
                                 <h3 className={`text-xl font-black mb-2 ${isUnlocked
-                                        ? 'text-zinc-900 dark:text-white'
-                                        : 'text-zinc-400 dark:text-zinc-600'
+                                    ? 'text-zinc-900 dark:text-white'
+                                    : 'text-zinc-400 dark:text-zinc-600'
                                     }`}>
                                     {achievement.title}
                                 </h3>
                                 <p className={`text-sm font-medium mb-3 ${isUnlocked
-                                        ? 'text-zinc-600 dark:text-zinc-400'
-                                        : 'text-zinc-400 dark:text-zinc-600'
+                                    ? 'text-zinc-600 dark:text-zinc-400'
+                                    : 'text-zinc-400 dark:text-zinc-600'
                                     }`}>
                                     {achievement.description}
                                 </p>
 
                                 {/* Status badge */}
                                 <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${isUnlocked
-                                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-500'
+                                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-500'
                                     }`}>
                                     <span className="material-symbols-outlined text-sm">
                                         {isUnlocked ? 'check_circle' : 'lock'}
