@@ -8,22 +8,23 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 /**
- * Create a new user with their name and avatar
+ * Create a new user with their name and avatar via API
  */
 export async function createUser(name: string, avatar: string = 'astronaut'): Promise<User | null> {
     try {
-        const { data, error } = await supabase
-            .from('users')
-            .insert([{ name, avatar }])
-            .select()
-            .single();
+        const response = await fetch('/api/create-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, avatar }),
+        });
 
-        if (error) {
-            console.error('Error creating user:', error);
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Error creating user via API:', error);
             return null;
         }
 
-        return data as User;
+        return await response.json() as User;
     } catch (error) {
         console.error('Exception creating user:', error);
         return null;
@@ -54,7 +55,7 @@ export async function getUser(userId: string): Promise<User | null> {
 }
 
 /**
- * Save a game score to the database
+ * Save a game score to the database via API
  */
 export async function saveGameScore(
     userId: string,
@@ -67,29 +68,28 @@ export async function saveGameScore(
     failedQuestions: FailedQuestion[]
 ): Promise<GameScore | null> {
     try {
-        const { data, error } = await supabase
-            .from('game_scores')
-            .insert([
-                {
-                    user_id: userId,
-                    level,
-                    score,
-                    accuracy,
-                    lives_remaining: livesRemaining,
-                    total_questions: totalQuestions,
-                    correct_answers: correctAnswers,
-                    failed_questions: failedQuestions,
-                },
-            ])
-            .select()
-            .single();
+        const response = await fetch('/api/save-score', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId,
+                level,
+                score,
+                accuracy,
+                livesRemaining,
+                totalQuestions,
+                correctAnswers,
+                failedQuestions,
+            }),
+        });
 
-        if (error) {
-            console.error('Error saving game score:', error);
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Error saving game score via API:', error);
             return null;
         }
 
-        return data as GameScore;
+        return await response.json() as GameScore;
     } catch (error) {
         console.error('Exception saving game score:', error);
         return null;
@@ -232,24 +232,26 @@ export function clearUserIdFromLocalStorage(): void {
  */
 
 /**
- * Save unlocked achievements to the database
+ * Save unlocked achievements to the database via API
  */
 export async function saveAchievements(
     userId: string,
     achievementIds: string[]
 ): Promise<boolean> {
     try {
-        const achievements = achievementIds.map(id => ({
-            user_id: userId,
-            achievement_id: id,
-        }));
+        const response = await fetch('/api/update-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId,
+                type: 'achievements',
+                data: { achievementIds },
+            }),
+        });
 
-        const { error } = await supabase
-            .from('user_achievements')
-            .insert(achievements);
-
-        if (error) {
-            console.error('Error saving achievements:', error);
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Error saving achievements via API:', error);
             return false;
         }
 
@@ -283,20 +285,26 @@ export async function getUserAchievements(userId: string): Promise<string[]> {
 }
 
 /**
- * Update user's days played
+ * Update user's days played via API
  */
 export async function updateUserDaysPlayed(
     userId: string,
     daysPlayed: string[]
 ): Promise<boolean> {
     try {
-        const { error } = await supabase
-            .from('users')
-            .update({ days_played: daysPlayed })
-            .eq('id', userId);
+        const response = await fetch('/api/update-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId,
+                type: 'daysPlayed',
+                data: { daysPlayed },
+            }),
+        });
 
-        if (error) {
-            console.error('Error updating days played:', error);
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Error updating days played via API:', error);
             return false;
         }
 
@@ -308,14 +316,14 @@ export async function updateUserDaysPlayed(
 }
 
 /**
- * Update user's best streak
+ * Update user's best streak via API
  */
 export async function updateUserBestStreak(
     userId: string,
     streak: number
 ): Promise<boolean> {
     try {
-        // Only update if new streak is better
+        // We still do a quick check to see if update is needed (optional, could be done in API too)
         const { data: user } = await supabase
             .from('users')
             .select('best_streak')
@@ -326,13 +334,19 @@ export async function updateUserBestStreak(
             return true; // No update needed
         }
 
-        const { error } = await supabase
-            .from('users')
-            .update({ best_streak: streak })
-            .eq('id', userId);
+        const response = await fetch('/api/update-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId,
+                type: 'bestStreak',
+                data: { streak },
+            }),
+        });
 
-        if (error) {
-            console.error('Error updating best streak:', error);
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('Error updating best streak via API:', error);
             return false;
         }
 
